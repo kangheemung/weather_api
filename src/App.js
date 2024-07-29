@@ -1,5 +1,11 @@
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { useEffect, useState } from 'react';
+import WeatherButton from './components/WeatherButton';
+import Header from './Header';
+import Weatherbox from './components/Weatherbox';
+const api_key = process.env.REACT_APP_API_KEY;
 
 function App() {
     //app기능
@@ -14,14 +20,59 @@ function App() {
         navigator.geolocation.getCurrentPosition((position) => {
             let lat = position.coords.latitude;
             let lon = position.coords.longitude;
+            getWeatherByCurrentLocation(lat, lon); // Fixed function name here
             console.log('현재위치', lat, lon);
         });
-        console.log('getCurrentLocation');
     };
+    const getWeatherByCurrentLocation = async (lat, lon) => {
+        let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log('data', data);
+        updateWeatherUI(data);
+    };
+    const updateWeatherUI = (weatherData) => {
+        const kelvinTemp = weatherData.main.temp;
+        const kelvinToCelsius = (kelvin) => {
+            return kelvin - 273.15; // Convert Kelvin to Celsius
+        };
+        const celsiusTemp = kelvinToCelsius(kelvinTemp);
+        document.getElementById('SeoulNowtemp').textContent = celsiusTemp.toFixed(2); // Rounded to 2 decimal places
+        const iconUrl = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
+        document.getElementById(
+            'weather_img'
+        ).innerHTML = `<img src="${iconUrl}" alt="Weather Icon" class="large-icon">`;
+        document.getElementById('wether_city').textContent = weatherData.name;
+        document.getElementById('SeoulLowtemp').textContent = `Low: ${Math.floor(
+            kelvinToCelsius(weatherData.main.temp_min)
+        )}°C`;
+        document.getElementById('SeoulHightemp').textContent = `High: ${Math.floor(
+            kelvinToCelsius(weatherData.main.temp_max)
+        )}°C`;
+
+        document.getElementById('humidity').textContent = `Humidity: ${weatherData.main.humidity}%`;
+
+        document.getElementById(
+            'weather_wind'
+        ).textContent = `Wind Speed: ${weatherData.wind.speed} m/s, Wind Direction: ${weatherData.wind.deg}°`;
+    };
+
     useEffect(() => {
         getCurrentLocation();
     }, []);
-    return <div className="App">water</div>;
+
+    useEffect(() => {
+        const apiKey = process.env.REACT_APP_API_KEY;
+        console.log('API Key:', apiKey);
+    }, []);
+
+    return (
+        <div className="App">
+            <Header />
+            <Weatherbox />
+            <WeatherButton />
+        </div>
+    );
 }
 
 export default App;
