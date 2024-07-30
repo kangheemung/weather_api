@@ -11,15 +11,58 @@ background-repeat: no-repeat;
   height: 40vmin;
   pointer-events: none;
 }
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
 
-.weather_top{display: flex;
+.weather_top{
+display: flex;
 border-right: 4px solid rgb(255, 255, 255);
+padding: 50px;
 
 }
 .weather_box{
-border: 4px solid rgb(255, 255, 255);
+    border: 4px solid rgb(255, 255, 255);
     display: center;
-    display: flex;}
+    display: flex;
+    border-radius: 15px;
+    background-color: #eaf8f9;
+margin-bottom: 30px;
+}
+.SeoulNowtemp{
+font-size: 66px;
+display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.side_curent_weather{
+padding: 50px;
+font-size: 16px;
+}
+.wether_city{
+font-size: 30px;
+margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.weather_img_icon{
+width: 150px;
+margin-left: 35px;
+}
+.weather_button{
+margin: 5px;
+}
+.WeatherButton_contanin{
+background-color: #282c34;
+}
+.side_curent_weather H3{
+font-size: 16px;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

@@ -1,12 +1,9 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { useEffect, useState } from 'react';
 import WeatherButton from './components/WeatherButton';
-import Header from './Header';
 import Weatherbox from './components/Weatherbox';
 const api_key = process.env.REACT_APP_API_KEY;
-
 function App() {
     //app기능
     //현재 위치 기반의 날씨가 보인다.
@@ -15,7 +12,16 @@ function App() {
     //현재위치 버튼을 누르면 다시 현재 위치 기반의 날씨가 나온다.
     //데이터를들고 오는 동안 로딩 스핀어가 돈다.
     //useEffct에는 파라미터가 2개 들어간다.
+
+    //アプリ機能
+    //現在位置ベースの天気が見えます。
+    //2.天気情報には都市、摂氏華氏状態状態
+    //5つのボタンがあります。
+    //現在の位置ボタンを現在の位置ベースの天気によって記録します。
+    //データを保持している間、ロードが戻ります。
+    //useEffctには2つのパラメータがあります。
     /////////////////////////////////////////
+    const [weather, setWeather] = useState(null);
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
             let lat = position.coords.latitude;
@@ -24,37 +30,13 @@ function App() {
             console.log('현재위치', lat, lon);
         });
     };
+
     const getWeatherByCurrentLocation = async (lat, lon) => {
         let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`;
         const response = await fetch(url);
         const data = await response.json();
-        console.log('data', data);
-        updateWeatherUI(data);
-    };
-    const updateWeatherUI = (weatherData) => {
-        const kelvinTemp = weatherData.main.temp;
-        const kelvinToCelsius = (kelvin) => {
-            return kelvin - 273.15; // Convert Kelvin to Celsius
-        };
-        const celsiusTemp = kelvinToCelsius(kelvinTemp);
-        document.getElementById('SeoulNowtemp').textContent = celsiusTemp.toFixed(2); // Rounded to 2 decimal places
-        const iconUrl = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
-        document.getElementById(
-            'weather_img'
-        ).innerHTML = `<img src="${iconUrl}" alt="Weather Icon" class="large-icon">`;
-        document.getElementById('wether_city').textContent = weatherData.name;
-        document.getElementById('SeoulLowtemp').textContent = `Low: ${Math.floor(
-            kelvinToCelsius(weatherData.main.temp_min)
-        )}°C`;
-        document.getElementById('SeoulHightemp').textContent = `High: ${Math.floor(
-            kelvinToCelsius(weatherData.main.temp_max)
-        )}°C`;
-
-        document.getElementById('humidity').textContent = `Humidity: ${weatherData.main.humidity}%`;
-
-        document.getElementById(
-            'weather_wind'
-        ).textContent = `Wind Speed: ${weatherData.wind.speed} m/s, Wind Direction: ${weatherData.wind.deg}°`;
+        setWeather(data);
+        console.log('app_data', data);
     };
 
     useEffect(() => {
@@ -68,9 +50,10 @@ function App() {
 
     return (
         <div className="App">
-            <Header />
-            <Weatherbox />
-            <WeatherButton />
+            <div className="container">
+                <Weatherbox weather={weather} />
+<WeatherButton className="WeatherButton_contanin" />
+            </div>
         </div>
     );
 }
