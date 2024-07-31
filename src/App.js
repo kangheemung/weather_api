@@ -1,10 +1,11 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect, useState, CSSProperties } from 'react';
-import ClipLoader from 'react-spinners/ClipLoader';
+import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import WeatherButton from './components/WeatherButton';
 import Weatherbox from './components/Weatherbox';
 const api_key = process.env.REACT_APP_API_KEY;
+const cities = ['paris', 'new york', 'tokyo', 'seoul'];
 function App() {
     //app기능
     //현재 위치 기반의 날씨가 보인다.
@@ -23,11 +24,10 @@ function App() {
     //useEffctには2つのパラメータがあります。
     /////////////////////////////////////////
     const [weather, setWeather] = useState(null);
-    let [city, setCity] = useState('');
+    const [city, setCity] = useState('');
     const [loading, setLoading] = useState(false);
-    const [activeButton, setActiveButton] = useState(null);
+    const [apiError, setAPIError] = useState('');
 
-    const cities = ['paris', 'new york', 'tokyo', 'seoul'];
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
             let lat = position.coords.latitude;
@@ -37,38 +37,57 @@ function App() {
         });
     };
     const getWeatherByCurrentLocation = async (lat, lon) => {
-        let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
-        setLoading(true);
-        const response = await fetch(url);
-        const data = await response.json();
-        setWeather(data);
-        setLoading(false);
-        console.log('app_data', setWeather);
+        try {
+            let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+            setLoading(true);
+            const response = await fetch(url);
+            const data = await response.json();
+            setWeather(data);
+            setLoading(false);
+            console.log('app_data', setWeather);
+        } catch (err) {
+            console.log(err);
+            setAPIError(err.message);
+            setLoading(false);
+        }
     };
-    const handleButtonClick = (item) => {
-        setCity(item);
-        setActiveButton(item);
-    };
+
     const getWeatherByCity = async () => {
-        let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
-        setLoading(true);
-        let res = await fetch(url);
-        let data = await res.json();
-        console.log(' getWeatherByCitydata', data);
-        setWeather(data);
-        setLoading(false);
+        try {
+            let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
+            setLoading(true);
+            let res = await fetch(url);
+            let data = await res.json();
+            console.log(' getWeatherByCitydata', data);
+            setWeather(data);
+            setLoading(false);
+        } catch (err) {
+            console.log(err);
+            setAPIError(err.message);
+            setLoading(false);
+        }
     };
     useEffect(() => {
         if (city == '') {
+            setLoading(true);
             getCurrentLocation();
         } else {
+            setLoading(true);
             getWeatherByCity();
         }
     }, [city]);
+
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
         console.log('API Key:', apiKey);
     }, []);
+    const handleCityChange = (city) => {
+        if (city === 'current') {
+            setCity(null);
+        } else {
+            setCity(city);
+        }
+    };
 
     return (
         <div className="App">
@@ -82,18 +101,19 @@ function App() {
                         data-testid="loader"
                     />
                 </div>
-            ) : (
+            ) : !apiError ? (
                 <div className="container">
                     <Weatherbox weather={weather} />
 
                     <WeatherButton
                         cities={cities}
                         setCity={setCity}
-
-                        activeButton={activeButton}
-                        setActiveButton={setActiveButton}
+                        activeButton={city}
+                        setActiveButton={handleCityChange}
                     />
                 </div>
+            ) : (
+                apiError
             )}
         </div>
     );
