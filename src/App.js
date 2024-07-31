@@ -22,6 +22,8 @@ function App() {
     //useEffctには2つのパラメータがあります。
     /////////////////////////////////////////
     const [weather, setWeather] = useState(null);
+    let [city, setCity] = useState('');
+    const cities = ['paris', 'new york', 'tokyo', 'seoul'];
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
             let lat = position.coords.latitude;
@@ -30,19 +32,19 @@ function App() {
             console.log('현재위치', lat, lon);
         });
     };
-
     const getWeatherByCurrentLocation = async (lat, lon) => {
-        let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}`;
+        let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
         const response = await fetch(url);
         const data = await response.json();
         setWeather(data);
-        console.log('app_data', data);
+        console.log('app_data', setWeather);
     };
-
     useEffect(() => {
         getCurrentLocation();
     }, []);
-
+    useEffect(() => {
+        console.log('city', city);
+    }, [city]);
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
         console.log('API Key:', apiKey);
@@ -52,7 +54,7 @@ function App() {
         <div className="App">
             <div className="container">
                 <Weatherbox weather={weather} />
-<WeatherButton className="WeatherButton_contanin" />
+                <WeatherButton className="WeatherButton_contanin" cities={cities} setCity={setCity} />
             </div>
         </div>
     );

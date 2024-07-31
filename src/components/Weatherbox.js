@@ -1,11 +1,12 @@
 import React from 'react';
+
 const Weatherbox = ({ weather }) => {
     console.log('weather?', weather);
-
     const kelvinToCelsius = (kelvin) => kelvin - 273.15;
-    if (!weather) {
-        return <div>Loading...</div>; // Render a loading message or spinner while weather data is being fetched
-    }
+    const celsiusToFahrenheit = (celsius) => (celsius * 9) / 5 + 32;
+    // Log weather properties to ensure data availability
+    //console.log('Weather Data:', weather);
+
     return (
         <div>
             <div>
@@ -18,13 +19,17 @@ const Weatherbox = ({ weather }) => {
                                 오늘의 날씨
                                 <div>
                                     <h3 id="SeoulNowtemp" className="SeoulNowtemp">
-                                        {Math.floor(kelvinToCelsius(weather?.main.temp))}°C
+                                        {Math.floor(weather?.main.temp)}°C /{' '}
+                                        {celsiusToFahrenheit(Math.floor(weather?.main.temp))}°F
                                     </h3>
                                 </div>
                                 <div>
                                     <h3 id="wether_city" className="wether_city">
                                         {weather?.name}
                                     </h3>
+                                    <p id="wether_stylee" className="wether_stylee">
+                                        {weather?.weather[0].description}
+                                    </p>
                                 </div>
                             </div>
                             <div className="weather_info_img">
@@ -41,16 +46,17 @@ const Weatherbox = ({ weather }) => {
                         </div>
                         <div className="side_curent_weather">
                             <h3 id="SeoulLowtemp" className="SeoulLowtemp">
-                                Low: {Math.floor(kelvinToCelsius(weather?.main.temp_min))}°C
+                                Low: {Math.floor(weather?.main.temp_min)}°C
                             </h3>
                             <h3 id="SeoulHightemp" className="SeoulHightemp">
-                                High: {Math.floor(kelvinToCelsius(weather?.main.temp_max))}°C
+                                High: {Math.floor(weather?.main.temp_max)}°C
                             </h3>
                             <h3 id="humidity" className="humidity">
                                 Humidity: {weather?.main.humidity}%
                             </h3>
                             <h3 id="weather_wind" className="weather_wind">
-                                Wind Speed: {weather?.wind.speed} m/s, Wind Direction: {weather?.wind.deg}°
+                                <p>Wind Speed: {weather?.wind.speed} m/s</p>
+                                <p> Wind Direction: {weather?.wind.deg}°</p>
                             </h3>
                         </div>
                     </div>
