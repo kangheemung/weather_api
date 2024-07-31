@@ -25,6 +25,8 @@ function App() {
     const [weather, setWeather] = useState(null);
     let [city, setCity] = useState('');
     const [loading, setLoading] = useState(false);
+    const [activeButton, setActiveButton] = useState(null);
+
     const cities = ['paris', 'new york', 'tokyo', 'seoul'];
     const getCurrentLocation = () => {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -42,6 +44,10 @@ function App() {
         setWeather(data);
         setLoading(false);
         console.log('app_data', setWeather);
+    };
+    const handleButtonClick = (item) => {
+        setCity(item);
+        setActiveButton(item);
     };
     const getWeatherByCity = async () => {
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}&units=metric`;
@@ -79,7 +85,14 @@ function App() {
             ) : (
                 <div className="container">
                     <Weatherbox weather={weather} />
-                    <WeatherButton className="WeatherButton_contanin" cities={cities} setCity={setCity} />
+
+                    <WeatherButton
+                        cities={cities}
+                        setCity={setCity}
+
+                        activeButton={activeButton}
+                        setActiveButton={setActiveButton}
+                    />
                 </div>
             )}
         </div>

@@ -18,6 +18,10 @@ background-repeat: no-repeat;
     height: 100vh;
     flex-direction: column;
 }
+.weather_button.active {
+  background-color: red;
+  color: white;
+}
 
 .weather_top{
 display: flex;
