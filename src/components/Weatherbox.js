@@ -1,11 +1,12 @@
 import React from 'react';
 
 const Weatherbox = ({ weather }) => {
-    console.log('weather?', weather);
+    if (!weather || !weather.main || !weather.weather || !weather.weather[0]) {
+        return <div>Loading...</div>;
+    }
+
     const kelvinToCelsius = (kelvin) => kelvin - 273.15;
     const celsiusToFahrenheit = (celsius) => (celsius * 9) / 5 + 32;
-    // Log weather properties to ensure data availability
-    //console.log('Weather Data:', weather);
 
     return (
         <div>

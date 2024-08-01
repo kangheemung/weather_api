@@ -68,7 +68,7 @@ function App() {
         }
     };
     useEffect(() => {
-        if (city == '') {
+        if (city == null) {
             setLoading(true);
             getCurrentLocation();
         } else {
@@ -104,13 +104,7 @@ function App() {
             ) : !apiError ? (
                 <div className="container">
                     <Weatherbox weather={weather} />
-
-                    <WeatherButton
-                        cities={cities}
-                        setCity={setCity}
-                        activeButton={city}
-                        setActiveButton={handleCityChange}
-                    />
+                    <WeatherButton cities={cities} handleCityChange={handleCityChange} selectedCity={city} />
                 </div>
             ) : (
                 apiError
