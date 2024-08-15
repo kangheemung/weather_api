@@ -1,5 +1,5 @@
 import { Button } from 'react-bootstrap';
-import React, { useState } from 'react';
+
 
 const WeatherButton = ({ cities, handleCityChange, selectedCity }) => {
     return (
