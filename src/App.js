@@ -72,7 +72,7 @@ function App() {
             if (!city) {
                 setLoading(true);
                 getCurrentLocation();
-            } else {
+} else {
                 setLoading(true);
                 getWeatherByCity();
             }
@@ -86,7 +86,7 @@ function App() {
     }, []);
     const handleCityChange = (selectedCity) => {
         if (selectedCity === 'current') {
-setCity('');
+            setCity('');
         } else {
             setCity(selectedCity);
         }
