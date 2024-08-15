@@ -40,11 +40,11 @@ function App() {
         try {
             let url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
             setLoading(true);
-            const response = await fetch(url);
-            const data = await response.json();
+            const res = await fetch(url);
+            const data = await res.json();
+            console.log('getWeatherByCitydata', data);
             setWeather(data);
             setLoading(false);
-            console.log('app_data', setWeather);
         } catch (err) {
             console.log(err);
             setAPIError(err.message);
@@ -58,7 +58,7 @@ function App() {
             setLoading(true);
             let res = await fetch(url);
             let data = await res.json();
-            console.log(' getWeatherByCitydata', data);
+            console.log('getWeatherByCitydata', data);
             setWeather(data);
             setLoading(false);
         } catch (err) {
@@ -68,24 +68,27 @@ function App() {
         }
     };
     useEffect(() => {
-        if (city == null) {
-            setLoading(true);
-            getCurrentLocation();
-        } else {
-            setLoading(true);
-            getWeatherByCity();
-        }
+        const fetchWeatherData = async () => {
+            if (!city) {
+                setLoading(true);
+                getCurrentLocation();
+            } else {
+                setLoading(true);
+                getWeatherByCity();
+            }
+        };
+        fetchWeatherData();
     }, [city]);
 
     useEffect(() => {
         const apiKey = process.env.REACT_APP_API_KEY;
         console.log('API Key:', apiKey);
     }, []);
-    const handleCityChange = (city) => {
-        if (city === 'current') {
-            setCity(null);
+    const handleCityChange = (selectedCity) => {
+        if (selectedCity === 'current') {
+setCity('');
         } else {
-            setCity(city);
+            setCity(selectedCity);
         }
     };
 
