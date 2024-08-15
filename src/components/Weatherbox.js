@@ -9,8 +9,8 @@ const Weatherbox = ({ weather }) => {
     const celsiusToFahrenheit = (celsius) => (celsius * 9) / 5 + 32;
 
     return (
-        <div>
-            <div>
+        <div className="weather_contain">
+<div>
                 <section>
                     <div id="output"></div>
                     <div className="weather_box">

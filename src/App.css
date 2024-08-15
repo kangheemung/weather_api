@@ -35,7 +35,7 @@ padding: 50px;
 .weather_box{
     border: 4px solid rgb(255, 255, 255);
     display: center;
-    display: flex;
+display: flex;
     border-radius: 15px;
     background-color: #eaf8f9;
     margin-bottom: 30px;
@@ -97,5 +97,52 @@ font-size: 16px;
   }
   to {
     transform: rotate(360deg);
+  }
+}
+@media screen and (max-width: 950px){
+  .container {
+    width: 80%;
+ 
+  }
+.weather_box{
+
+  display: block;
+}
+  .weather_contain {
+   
+    display: block;
+    width: 80%;
+  }
+
+.weather_top {
+    flex-direction: column;
+    border-right: none;
+    padding: 20px;
+  }
+.container{
+  flex-direction: column;
+}
+.SeoulNowtemp{
+font-size: 24px;
+}
+.weather_info_img{
+text-align: center;
+}
+.WeatherButton_contanin{
+margin: 1em;
+padding: 1em;
+border-radius: 10%;
+}
+.btn .btn-primary{margin: 1em;}
+.weather_img_icon{margin: 0;}
+.wether_city{
+font-size:16px;
+margin-top: 5px;
+font-weight: bold;}
+.side_curent_weather{
+border-top:4px solid rgb(255, 255, 255);
+  margin-top: 20px; /* Add margin top to create spacing between weather_top and side_curent_weather */
+  padding: 20px; /* Adjust padding as needed */
+font-size: 14px; 
   }
 }
